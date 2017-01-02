@@ -52,9 +52,10 @@ struct InitialParser: Parser {
             case RespSimpleString.signature: parser = SimpleStringParser()
             case RespInteger.signature: parser = IntegerParser()
             case RespBulkString.signature: parser = BulkStringParser()
-            case RespArray.signature: parser = ArrayParser()
+            case RespArray.signature, "3": parser = ArrayParser()
             default:
-                throw RedbirdError.parsingStringNotThisType(try alreadyRead.stringView(), nil)
+		print("state looks like alreadyRead: \(try alreadyRead.stringView()) read:\(try read.stringView())")
+                throw RedbirdError.parsingStringNotThisType(signature, nil)
         }
         
         return try parser.parse(read, reader: reader)
